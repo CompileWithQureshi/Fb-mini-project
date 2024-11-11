@@ -13,7 +13,7 @@ UserRoute.post("/user", CreateUser);
 UserRoute.post("/user/login", LoginUser);
 
 UserRoute.patch("/user",authMiddleware, UpdateUser);
-UserRoute.get("/users",authMiddleware, GetAll);
+UserRoute.get("/users", GetAll);
 UserRoute.delete("/user",authMiddleware, SoftDeleteUser);
 
 export default UserRoute;

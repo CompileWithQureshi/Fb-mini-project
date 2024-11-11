@@ -32,7 +32,11 @@ const CreateUser = async (req, res) => {
     res.status(200).json({
       message: "Succes",
       data: saveUser,
+      
     });
+
+
+    // res.send('testing')
   } catch (error) {
     res.status(500).json({
       message: `${error}`,
