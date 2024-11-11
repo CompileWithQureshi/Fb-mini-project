@@ -1,0 +1,21 @@
+* Users CRUD
+  - GET /users/:id - All users retrive or partcular user
+  - POST /user - Add a new user
+  - PATCH /user - Update user
+  - DELETE /user - Delete user 
+
+* Post CRUD 
+   - GET /posts/:id - All users posts or particular user posts
+   - POST /post - Add a new post for a user
+   - PATCH /post - update post
+   - POST /post/like - like a post or unlike a post
+   - Post /post/comment - comment a post or remove comment or edit comment
+   - Delete /post - delete a post 
+
+- userName
+- user_name
+
+
+
+
+MONGO_URL=mongodb+srv://saidqureshi300:[[[b6SckjLoDCAZN1hk]]]@dineout.ehdo7.mongodb.net/fb
