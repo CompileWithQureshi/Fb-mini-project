@@ -8,12 +8,12 @@ import cros from 'cors'
 dotenv.config(); // Correct way to import dotenv in ES Modules
 
 const app = express();
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 5000;
 const MONGO_URL = process.env.MONGO_URL;
-// var corsOptions = {
-//   origin: "http://localhost:5173"
-// };
-app.use(cros())
+var corsOptions = {
+  origin: "http://localhost:5173"
+};
+app.use(cros(corsOptions))
 
 // Middleware
 app.use(express.json());

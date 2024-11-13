@@ -8,7 +8,7 @@ const CreateUser = async (req, res) => {
   const { userName, email, password } = req.body;
 
   if (!userName || !email || !password) {
-    res.status(400).json({
+    return res.status(400).json({
       message: "Input in empty",
     });
   }
@@ -68,7 +68,7 @@ const LoginUser = async (req, res) => {
       });
     }
 
-    const token = jwt.sign({ userId: user._id }, process.env.JWT_KEY, {
+    const token = jwt.sign({ userId: user._id }, process.env.JWT_TOKEN, {
       expiresIn: "1h",
     });
     res.status(200).json({
