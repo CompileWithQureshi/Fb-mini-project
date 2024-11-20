@@ -7,6 +7,7 @@ import {
   createBrowserRouter,
   RouterProvider,
 } from "react-router-dom";
+import ProctedRoute from '../components/ProctedRoute'
 
 
 function App() {
@@ -21,7 +22,11 @@ function App() {
     },
     {
       path:'/post',
-      element:<Posts/>
+      element:(
+        <ProctedRoute>
+        <Posts/>
+      </ProctedRoute>
+      )
     },
     {
       path:'/post?id=123',

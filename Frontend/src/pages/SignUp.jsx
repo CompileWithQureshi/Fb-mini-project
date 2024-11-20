@@ -8,12 +8,14 @@ import {
   Input,
   Button,
 } from '@chakra-ui/react';
+import {useNavigate} from 'react-router-dom'
 
 function SignUp() {
+  const navigate=useNavigate()
   const [user, setUser] = useState({
     userName: '',
     email: '',
-    phone: '',
+    
     password: ''
   });
   
@@ -52,15 +54,15 @@ function SignUp() {
     }
 
     try {
-      const response = await axios.post('/api/user1', user);
-      console.log("Response from server:", response);
+      const response = await axios.post('/api/user', user);
+      // console.log("Response from server:", response);
 
       if (response.status === 200) {
         toast({
           title: 'Account created.',
           description: "We've created your account for you.",
           status: 'success',
-          duration: 9000,
+          duration: 2000,
           isClosable: true,
         });
 
@@ -72,6 +74,7 @@ function SignUp() {
             phone: '',
             password: ''
           });
+          navigate('/login')
           setIsError({
             isUser: false,
             isEmail: false,
@@ -89,7 +92,7 @@ function SignUp() {
       }
 
     } catch (error) {
-      console.error("Error submitting data:", error.response?.data || error.message);
+      // console.error("Error submitting data:", error.response?.data || error.message);
       toast({
         title: 'Error.',
         description: 'There was an error processing your request.',
@@ -101,8 +104,9 @@ function SignUp() {
   };
 
   return (
-    <div className="flex justify-center items-center h-screen">
-      <form onSubmit={handleSubmit} className="w-[500px]">
+    <div className="flex justify-center items-center h-screen x">
+      <form onSubmit={handleSubmit} className="w-[400px]">
+        <h1 className='text-center font-mono font-semibold text-3xl'>Sign Up</h1>
         <FormControl isInvalid={isError.isUser} mb={4}>
           <FormLabel>User Name</FormLabel>
           <Input
