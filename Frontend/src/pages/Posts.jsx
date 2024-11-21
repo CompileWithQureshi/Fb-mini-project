@@ -27,8 +27,8 @@ function Posts() {
         });
 
 
-        console.log("API Response:", result);
-        setPostData(result.data.posts);
+        // console.log("API Response:", result.data.data);
+        setPostData(result.data.data);
       } catch (error) {
         console.error("Error Response:", error.response?.data || error.message);
       }
@@ -44,28 +44,33 @@ function Posts() {
       backdropFilter='blur(10px) hue-rotate(90deg)'
     />
   )
+  
 
-  function onLogout(params) {
+  function onLogout() {
     logout()
     
   }
+  const handleNewPost = (newPost) => {
+    console.log('New Post Data:', newPost);
+    setPostData((prevPosts) => [...prevPosts, newPost]);
+  };
+  
+  
+
   
   return (
     <div className="flex justify-between items-center">
       <div className="flex flex-col items-center  w-full">
-      {postData.length === 0?<h1>No post Found</h1>:postData.map((post) =>{
-        const {userId,content,likesId,comment}=post
-
-        console.log('like',likesId?.[0]);
-        
-        
-        
-        return(
-          <>
-          <Cards data={{userId,content,likesId,comment}}/>
-          </>
-        )
-      })}
+      {postData.length === 0?<h1>No post Found</h1>:(
+          postData.map((post) => {
+            const { userId, content, likesId, comment,_id } = post;
+            console.log('post');
+            
+            return (
+              <Cards key={post._id} data={{ userId, content, likesId, comment,_id }} />
+            );
+          })
+        )}
     </div>
     <div className="absolute top-16 right-80">
     <Button
@@ -85,10 +90,12 @@ function Posts() {
       colorScheme="red" // You can change the color to suit your design
       onClick={onLogout} // Handle the logout functionality
       size="lg" // Adjust the size as necessary
+      
     />
 
     </div>
-      <CreatePost isOpen={isOpen} onClose={onClose} overlay={overlay} />
+      <CreatePost isOpen={isOpen} onClose={onClose} overlay={overlay} onNewPost={handleNewPost}/>
+      
     </div>
   );
 }

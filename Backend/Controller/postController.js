@@ -59,7 +59,7 @@ const GetAllPost = async (req, res) => {
 
     res.status(200).json({
       message: "Data is Fetched ",
-      posts,
+      data:posts,
     });
   } catch (error) {
     res.status(500).json({
@@ -112,32 +112,28 @@ const UpdatePost = async (req, res) => {
 };
 
 const AddLike = async (req, res) => {
-  const { postId, userId } = req.body;
+  const { postId } = req.body;
+  const userId = req.user.userId; // Extract from authenticated user
 
-  if (req.user.userId !== userId) {
-    return res
-      .status(403)
-      .json({ message: "Unauthorized to update this user" });
-  }
-
-  if (!postId || !userId) {
+  if (!postId) {
     return res.status(400).json({
-      message: `Input is Empty`,
+      message: "Post ID is required",
     });
   }
 
   try {
     const post = await Post.findById(postId);
+
     if (!post) {
       return res.status(404).json({
         message: "Post not found",
       });
     }
 
-    // Ensure likesId is initialized
-    post.likesId = post.likesId;
+    if (!post.likesId) {
+      post.likesId = [];
+    }
 
-    // Check if user has already liked the post
     if (post.likesId.includes(userId)) {
       post.likesId = post.likesId.filter(
         (id) => id.toString() !== userId.toString()
@@ -146,13 +142,12 @@ const AddLike = async (req, res) => {
       post.likesId.push(userId);
     }
 
-    // Save the updated post
     const updatedPost = await post.save();
 
     res.status(200).json({
       message: post.likesId.includes(userId)
-        ? "Post liked successfully"
-        : "Post unliked successfully",
+        ? "liked"
+        : "unliked",
       data: updatedPost,
     });
   } catch (error) {
@@ -162,14 +157,15 @@ const AddLike = async (req, res) => {
   }
 };
 
+
 const DeletePost = async (req, res) => {
-  const { postId ,id} = req.body;
+  const { postId ,userId} = req.body;
 
   if (!postId) {
     return res.status(400).json({ message: "Post ID is required" });
   }
 
-  if (req.user.userId !== id) {
+  if (req.user.userId !== userId) {
     return res
       .status(403)
       .json({ message: "Unauthorized to update this user" });
@@ -199,13 +195,13 @@ const AddComment = async (req, res) => {
       .json({ message: "Post ID, User ID, and Comment are required" });
   }
 
-  if (req.user.userId !== id) {
+  if (req.user.userId !== userId) {
     return res
       .status(403)
       .json({ message: "Unauthorized to update this user" });
   }
   try {
-    const post = await Post.findById(postId);
+    const post = await Post.findById(postId).populate('userId','userName email')
 
     if (!post) {
       return res.status(400).json({ message: "Post not found" });

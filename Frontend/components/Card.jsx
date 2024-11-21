@@ -12,28 +12,55 @@ import {
     Heading, 
     Image 
   } from '@chakra-ui/react';
-  import { BsThreeDotsVertical } from 'react-icons/bs';
   import { BiLike, BiChat, BiShare } from 'react-icons/bi';
-import { useState } from 'react';
+import { useState,useContext } from 'react';
+import axios from 'axios';
+import { AuthContext } from '../hooks/AuthContext';
 
 function Cards({data}) {
-    const [islike,setIslike]=useState(false)
-    const {userId,content,likesId,comment}=data;
+  const {token,user}=useContext(AuthContext)
+
+  const {userId,content,likesId,comment,_id}=data;
+  const [islike, setIslike] = useState(likesId?.includes(user.userId));
+  const [likesCount, setLikesCount] = useState(likesId?.length);
+
     // console.log('like',like);
     
 
-    function handleLike() {
-        setIslike(!islike)
+    async function handleLike() {
+      
+      try {
+        const response=await axios.post('/api/post/like',{postId:_id},{
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        })
+        const { message } = response.data;
+        console.log( message);
+    
+        if (message === "liked") {
+          setIslike(true); // Mark as liked
+          setLikesCount((prev) => prev + 1); // Increment the likes count
+        } else if (message === "unliked") {
+          setIslike(false); // Mark as unliked
+          setLikesCount((prev) => prev - 1); // Decrement the likes count
+        }
+      } catch (error) {
+        console.error(error.response?.data?.message || error.message);
+      }
+    
+      
+      
     }
   return (
-    <Card maxW='md' margin={5} textAlign='start' boxShadow='lg' p='6' rounded='md' bg='white'>
+    <Card maxW='md' margin={5} w='170rem' textAlign='start' boxShadow='2xl' p='6' rounded='md' bg='white'>
   <CardHeader>
     <Flex spacing='4'>
       <Flex flex='1' gap='4'  justifyContent='flex-start'flexWrap='wrap'>
         <Avatar name='Segun Adebayo' src='https://bit.ly/sage-adebayo' />
 
         <Box>
-          <Heading size='sm' >{userId.userName}</Heading>
+          <Heading size='sm' >{userId?.userName || 'Guest'}</Heading>
           <Text>Creator, Chakra UI</Text>
         </Box>
       </Flex>
@@ -68,7 +95,7 @@ function Cards({data}) {
   >
     <Flex alignItems="center">
     <Text fontSize={20} fontWeight={600} mr={2}>
-      {likesId?.length || 0}
+    {likesCount}
     </Text>
     <IconButton
       variant="unstyled" // Ghost style for the button itself
