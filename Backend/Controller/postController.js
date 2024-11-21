@@ -44,20 +44,18 @@ const CreatePost = async (req, res) => {
 };
 
 const GetAllPost = async (req, res) => {
-  const { id, user } = req.query;
+  const { id } = req.query;
 
-  if (req.user.userId !== id) {
-    return res
-      .status(403)
-      .json({ message: "Unauthorized to update this user" });
-  }
+  
   try {
     let query = {};
 
-    if (id) query._id = id;
-    if (user) query.userId = user;
+    if (id) query.userId= id;
+    // if (user) query.userId = user;
+    console.log(query);
+    
 
-    const posts = await Post.find(query);
+    const posts = await Post.find(query).populate('userId', 'userName');
 
     res.status(200).json({
       message: "Data is Fetched ",

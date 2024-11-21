@@ -11,7 +11,7 @@ const authMiddleware = async (req, res, next) => {
   }
 
   try {
-    const decode = jwt.verify(token, process.env.JWT_KEY);
+    const decode = jwt.verify(token, process.env.JWT_TOKEN);
 
     console.log('decode', decode);
 
@@ -20,6 +20,7 @@ const authMiddleware = async (req, res, next) => {
   } catch (error) {
     return res.status(500).json({
       message: `Error ${error}`,
+            
     });
   }
 };

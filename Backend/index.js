@@ -3,7 +3,7 @@ import mongoose from "mongoose";
 import dotenv from "dotenv";
 import UserRoute from "./Router/userRoute.js";
 import PostRoute from "./Router/postRoute.js";
-import cros from 'cors'
+import cors from 'cors'
 
 dotenv.config(); // Correct way to import dotenv in ES Modules
 
@@ -13,7 +13,7 @@ const MONGO_URL = process.env.MONGO_URL;
 var corsOptions = {
   origin: "http://localhost:5173"
 };
-app.use(cros(corsOptions))
+app.use(cors(corsOptions));
 
 // Middleware
 app.use(express.json());

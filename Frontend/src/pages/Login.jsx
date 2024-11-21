@@ -51,10 +51,12 @@ function Login() {
     
     try {
       const response= await axios.post('/api/user/login',userData)
-      const {message,token}=response.data
+      const {message,token,user}=response.data
       console.log('message:',message);
-      // console.log('token:',token);
-      logins(token)
+      const id=user._id
+      console.log('id',id);
+      
+      logins(token,id)
       if (response.status ===200) {
           toast({
             title:message,
@@ -63,7 +65,7 @@ function Login() {
             variant:'subtle',
             position:'bottom',
             isClosable:true,
-            duration:2000
+            duration:1000
           })
           setTimeout(()=>{
             setUserData({
@@ -71,7 +73,7 @@ function Login() {
               password:''
             })
             navigate('/post')
-          },3000)
+          },1000)
 
           clearTimeout()
       }
