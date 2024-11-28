@@ -16,7 +16,7 @@ import axios from "axios";
 import { AuthContext } from "../hooks/AuthContext";
 
 
-function CreatePost({ isOpen, onClose,onNewPost  }) {
+function CreatePost({ isOpen, onClose,newPost  }) {
     const[content,setContent]=useState('')
   // Use refs for focus management
   const initialRef = useRef(null);
@@ -45,7 +45,8 @@ function CreatePost({ isOpen, onClose,onNewPost  }) {
 
         if (response.status === 200) {
             console.log('response',response.data.data);
-            onNewPost(response.data.data);
+            // onNewPost(response.data.data);
+            newPost(response.data.data)
             setContent('')
             onClose()
 

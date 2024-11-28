@@ -187,19 +187,15 @@ const DeletePost = async (req, res) => {
 };
 
 const AddComment = async (req, res) => {
-  const { postId, userId, comment, commentId } = req.body;
+  const { postId, comment  } = req.body;
 
-  if (!postId || !userId || !comment) {
+  if (!postId  || !comment) {
     return res
       .status(400)
       .json({ message: "Post ID, User ID, and Comment are required" });
   }
 
-  if (req.user.userId !== userId) {
-    return res
-      .status(403)
-      .json({ message: "Unauthorized to update this user" });
-  }
+  const userId = req.user?.userId;
   try {
     const post = await Post.findById(postId).populate('userId','userName email')
 
@@ -211,9 +207,11 @@ const AddComment = async (req, res) => {
     post.comments.push({ userId, comment });
 
     const updatedPost = await post.save();
+    console.log("updatedPost",updatedPost.comments);
+    
 
     res.status(200).json({
-      message: commentId
+      message: updatedPost.comments.length >0
         ? "Comment updated successfully"
         : "Comment added successfully",
       data: updatedPost,

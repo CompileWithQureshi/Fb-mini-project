@@ -50,12 +50,11 @@ function Posts() {
     logout()
     
   }
-  const handleNewPost = (newPost) => {
-    console.log('New Post Data:', newPost);
-    setPostData((prevPosts) => [...prevPosts, newPost]);
-  };
   
   
+  const newPostData=(newPost)=>{
+    setPostData((prevPost)=>[newPost,...prevPost])
+  }
 
   
   return (
@@ -63,11 +62,11 @@ function Posts() {
       <div className="flex flex-col items-center  w-full">
       {postData.length === 0?<h1>No post Found</h1>:(
           postData.map((post) => {
-            const { userId, content, likesId, comment,_id } = post;
+            const { userId, content, likesId, comments,_id } = post;
             console.log('post');
             
             return (
-              <Cards key={post._id} data={{ userId, content, likesId, comment,_id }} />
+              <Cards key={post._id} data={{ userId, content, likesId, comments,_id, }} />
             );
           })
         )}
@@ -94,7 +93,7 @@ function Posts() {
     />
 
     </div>
-      <CreatePost isOpen={isOpen} onClose={onClose} overlay={overlay} onNewPost={handleNewPost}/>
+      <CreatePost isOpen={isOpen} onClose={onClose} overlay={overlay} newPost={newPostData}/>
       
     </div>
   );
