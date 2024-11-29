@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState,useContext } from "react";
+import React, { useRef, useState, useContext } from "react";
 import {
   Modal,
   ModalOverlay,
@@ -15,94 +15,71 @@ import {
 import axios from "axios";
 import { AuthContext } from "../hooks/AuthContext";
 
-
-function CreatePost({ isOpen, onClose,newPost  }) {
-    const[content,setContent]=useState('')
-  // Use refs for focus management
+function CreatePost({ isOpen, onClose, newPost }) {
+  const [content, setContent] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
   const initialRef = useRef(null);
-  const finalRef = useRef(null);
-  // const {user,token}=useContext(AuthContext)
-  const token =localStorage.getItem('token')
-  const user=localStorage.getItem('userId')
+  const { user, token } = useContext(AuthContext);
 
-  function handleInputChange(e) {
-    const {value}=e.target
-    setContent(value)
-  }
+  const handleInputChange = (e) => setContent(e.target.value);
 
-  const handleContent=async(e)=>{
-    e.preventDefault()
-    // console.log(content);
+  const handleContent = async (e) => {
+    e.preventDefault();
+    if (!content.trim()) return;
 
-    if (!content.trim()) {
-        console.error(`content is empty`)
-    }
-
+    setIsLoading(true);
     try {
-        const response=await axios.post('/api/post',{userId:user,content},{
-            headers: {
-                Authorization: `Bearer ${token}`, // Authorization header
-              },
-        })
-
-        if (response.status === 200) {
-            console.log('response',response.data.data);
-            // onNewPost(response.data.data);
-            newPost(response.data.data)
-            setContent('')
-            onClose()
-
-
-        }
-    } catch (error) {
-        console.error("Error creating post:", error.response?.data || error.message);
+      const response = await axios.post(
+        "/api/post",
+        { userId: user, content },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      if (response.status === 200) {
+        if (typeof newPost === "function") newPost(response.data.data);
+        setContent("");
+        onClose();
       }
-  
-
-   
-    
-
-  }
-
+    } catch (error) {
+      console.error("Error creating post:", error.response?.data || error.message);
+      alert("Failed to create the post.");
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   return (
-    <Modal
-      initialFocusRef={initialRef}
-      finalFocusRef={finalRef}
-      isOpen={isOpen}
-      onClose={onClose}
-    >
+    <Modal initialFocusRef={initialRef} isOpen={isOpen} onClose={onClose}>
       <ModalOverlay />
-      <ModalContent>
+      <ModalContent w={{ base: "90%", sm: "80%", md: "40%" }} maxW="600px" p={{ base: 4, sm: 6 }}>
         <ModalHeader>Create a New Post</ModalHeader>
         <form onSubmit={handleContent}>
-
-        <ModalBody pb={6}>
-          {/* First input field */}
-          
-          {/* Second input field */}
-            
-          <FormControl mt={4}>
-            <FormLabel>Content</FormLabel>
-      <Textarea
-        value={content}
-        onChange={handleInputChange}
-        placeholder='Here is a sample placeholder'
-        size='sm'
-      />
-          </FormControl>
-        </ModalBody>
-
-        <ModalFooter>
-          {/* Save Button */}
-          <Button colorScheme="blue" mr={3} type="submit">
-            Save
-          </Button>
-          {/* Cancel Button */}
-          <Button onClick={onClose}>Cancel</Button>
-        </ModalFooter>
+          <ModalBody pb={6}>
+            <FormControl mt={4}>
+              <FormLabel>Content</FormLabel>
+              <Textarea
+                ref={initialRef}
+                value={content}
+                onChange={handleInputChange}
+                placeholder="Write something..."
+                size="sm"
+                resize="vertical" // Allow vertical resizing
+              />
+            </FormControl>
+          </ModalBody>
+          <ModalFooter display="flex" flexWrap="wrap" gap={2}>
+            <Button
+              colorScheme="green"
+              type="submit"
+              isLoading={isLoading}
+              w={{ base: "full", sm: "auto" }}
+            >
+              Save
+            </Button>
+            <Button onClick={onClose} w={{ base: "full", sm: "auto" }}>
+              Cancel
+            </Button>
+          </ModalFooter>
         </form>
-
       </ModalContent>
     </Modal>
   );

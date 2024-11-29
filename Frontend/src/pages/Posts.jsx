@@ -1,110 +1,156 @@
-import { useState, useEffect,useContext } from "react";
+import { useState, useEffect, useContext } from "react";
 import axios from "axios";
 import Cards from "../../components/Card";
-import { Button, useDisclosure ,ModalOverlay,IconButton } from "@chakra-ui/react";
+import {
+  Button,
+  useDisclosure,
+  ModalOverlay,
+  IconButton,
+  Box,
+  VStack,
+  Text,
+  Spinner,
+  useToast,
+  Container,
+} from "@chakra-ui/react";
 import { MdLogout } from "react-icons/md";
-
 import CreatePost from "../../components/CreatePost";
 import { AuthContext } from "../../hooks/AuthContext";
 
 function Posts() {
   const [postData, setPostData] = useState([]);
-  const { isOpen, onOpen, onClose } = useDisclosure()
-  const [overlay, setOverlay] = useState(null)
-  const {logout,} =useContext(AuthContext)
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const [overlay, setOverlay] = useState(null);
+  const { logout } = useContext(AuthContext);
   
-  const user=localStorage.getItem('userId')
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  const toast = useToast();
+
   useEffect(() => {
     const fetchData = async () => {
       try {
         const token = localStorage.getItem("token");
-        // console.log("Retrieved Token:", token);
-
         const result = await axios.get("/api/post", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
         });
 
-        // console.log('user',user);
-        
-        // console.log("API Response:", result.data.data);
         setPostData(result.data.data);
       } catch (error) {
+        setError("Error fetching posts.");
         console.error("Error Response:", error.response?.data || error.message);
+        toast({
+          title: "Error",
+          description: "Failed to load posts, please try again later.",
+          status: "error",
+          duration: 5000,
+          isClosable: true,
+        });
+      } finally {
+        setLoading(false);
       }
     };
 
     fetchData();
-  }, []);
-  // console.log('apip',postData);
+  }, [toast]);
 
-                   
-  
-  
-
-  
-  
-
-  const OverlayOne=()=>(
-    <ModalOverlay
-      bg='blackAlpha.300'
-      backdropFilter='blur(10px) hue-rotate(90deg)'
-    />
-  )
-  
+  const OverlayOne = () => (
+    <ModalOverlay bg="blackAlpha.300" backdropFilter="blur(10px) hue-rotate(90deg)" />
+  );
 
   function onLogout() {
-    logout()
-    
-  }
-  
-  
-  const newPostData=(newPost)=>{
-    setPostData((prevPost)=>[newPost,...prevPost])
+    logout();
   }
 
-  
+  const newPostData = (newPost) => {
+    setPostData((prevPost) => [newPost, ...prevPost]);
+    toast({
+      title: "Post Created",
+      description: "Your new post has been successfully created.",
+      status: "success",
+      duration: 5000,
+      isClosable: true,
+    });
+  };
+
+  const deletePost = (postId) => {
+    setPostData((prevPost) => prevPost.filter((posts) => posts._id !== postId));
+    toast({
+      title: "Post Deleted",
+      description: "The post has been deleted successfully.",
+      status: "success",
+      duration: 5000,
+      isClosable: true,
+    });
+  };
+
+  if (loading) return <Box className="flex justify-center mt-8"><Spinner size="xl" /></Box>;
+  if (error) return <Box className="flex justify-center mt-8"><Text color="red.500">{error}</Text></Box>;
+
   return (
-    <div className="flex justify-between items-center">
-      <div className="flex flex-col items-center  w-full">
-      {postData.length === 0?<h1>No post Found</h1>:(
-          postData.map((post) => {
-            const { userId, content, likesId, comments,_id } = post;
-            // console.log('post',userId._id);
+    <Container maxW="container.lg" py={6}>
+      <Box mb={6} className="flex justify-between items-center sm:flex-col sm:items-center">
+        {/* Buttons */}
+        <div className="flex flex-col gap-4 sm:flex-row sm:gap-6 fixed z-10 left-1/3 ">
+          <Button
+            onClick={() => { setOverlay(<OverlayOne />); onOpen(); }}
+            colorScheme="green"
+            size="lg"
+            width={{ base: "full", sm: "auto" }}
+            borderRadius="lg"
+            boxShadow="lg"
+            _hover={{ bg: "green.600" }}
+          >
+            Create New Post
+          </Button>
+          <IconButton
+            icon={<MdLogout />}
+            aria-label="Logout"
+            variant="solid"
+            colorScheme="red"
+            onClick={onLogout}
+            size="lg"
+            borderRadius="full"
+            width={{ base: "full", sm: "auto" }}
+            _hover={{ bg: "red.600" }}
+          />
+        </div>
+      </Box>
 
-            
+      {/* Posts Section */}
+      <VStack
+        spacing={6}
+        align="stretch"
+        className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"
+      >
+        {postData.length === 0 ? (
+          <Text textAlign="center" color="gray.500" fontSize="xl">
+            No posts found.
+          </Text>
+        ) : (
+          postData.map((post) => {
+            const { userId, content, likesId, comments, _id } = post;
             return (
-              <Cards key={post._id} data={{ userId, content, likesId, comments,_id, }} />
+              <Cards
+                key={post._id}
+                data={{ userId, content, likesId, comments, _id }}
+                deletePost={deletePost}
+              />
             );
           })
         )}
-    </div>
-    <div className="absolute top-16 right-80">
-    <Button
-        onClick={() => {
-          setOverlay(<OverlayOne />)
-          onOpen()
-        }}
-      >
-        Create New Post
-      </Button>
+      </VStack>
 
-      <span>   </span>
-      <IconButton
-      icon={<MdLogout />} // Logout icon
-      aria-label="Logout"
-      variant="ghost" // Makes the button transparent (ghost style)
-      colorScheme="red" // You can change the color to suit your design
-      onClick={onLogout} // Handle the logout functionality
-      size="lg" // Adjust the size as necessary
-      
-    />
-
-    </div>
-      <CreatePost isOpen={isOpen} onClose={onClose} overlay={overlay} newPost={newPostData}/>
-      
-    </div>
+      <CreatePost
+        isOpen={isOpen}
+        onClose={onClose}
+        overlay={overlay}
+        newPost={newPostData}
+      />
+    </Container>
   );
 }
 

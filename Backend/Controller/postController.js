@@ -69,8 +69,8 @@ const GetAllPost = async (req, res) => {
 };
 
 const UpdatePost = async (req, res) => {
-  const { postId, content ,id} = req.body;
-  console.log(id);
+  const { postId, content } = req.body;
+  // console.log(id);
   
   if (!postId || !content) {
     return res.status(400).json({
@@ -155,17 +155,12 @@ const AddLike = async (req, res) => {
 
 
 const DeletePost = async (req, res) => {
-  const { postId ,userId} = req.body;
-
+  const { postId } = req.query;
   if (!postId) {
     return res.status(400).json({ message: "Post ID is required" });
   }
 
-  if (req.user.userId !== userId) {
-    return res
-      .status(403)
-      .json({ message: "Unauthorized to update this user" });
-  }
+  // const userId = req.user?.userId;
 
   try {
     const deletedPost = await Post.findByIdAndDelete(postId);
