@@ -15,7 +15,7 @@ PostRoute.post("/post", authMiddleware, CreatePost);
 PostRoute.get("/post", authMiddleware, GetAllPost);
 PostRoute.patch("/post", authMiddleware, UpdatePost);
 PostRoute.post("/post/like", authMiddleware, AddLike);
-PostRoute.delete("/post/", authMiddleware, DeletePost);
-PostRoute.post("/post/comment/", authMiddleware, AddComment);
+PostRoute.delete("/post", authMiddleware, DeletePost);
+PostRoute.post("/post/comment", authMiddleware, AddComment);
 
 export default PostRoute;

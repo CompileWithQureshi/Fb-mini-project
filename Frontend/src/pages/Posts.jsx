@@ -11,14 +11,14 @@ function Posts() {
   const [postData, setPostData] = useState([]);
   const { isOpen, onOpen, onClose } = useDisclosure()
   const [overlay, setOverlay] = useState(null)
-  const {logout} =useContext(AuthContext)
+  const {logout,} =useContext(AuthContext)
   
-
+  const user=localStorage.getItem('userId')
   useEffect(() => {
     const fetchData = async () => {
       try {
         const token = localStorage.getItem("token");
-        console.log("Retrieved Token:", token);
+        // console.log("Retrieved Token:", token);
 
         const result = await axios.get("/api/post", {
           headers: {
@@ -26,7 +26,8 @@ function Posts() {
           },
         });
 
-
+        // console.log('user',user);
+        
         // console.log("API Response:", result.data.data);
         setPostData(result.data.data);
       } catch (error) {
@@ -36,7 +37,14 @@ function Posts() {
 
     fetchData();
   }, []);
-  console.log('apip',postData);
+  // console.log('apip',postData);
+
+                   
+  
+  
+
+  
+  
 
   const OverlayOne=()=>(
     <ModalOverlay
@@ -63,7 +71,8 @@ function Posts() {
       {postData.length === 0?<h1>No post Found</h1>:(
           postData.map((post) => {
             const { userId, content, likesId, comments,_id } = post;
-            console.log('post');
+            // console.log('post',userId._id);
+
             
             return (
               <Cards key={post._id} data={{ userId, content, likesId, comments,_id, }} />

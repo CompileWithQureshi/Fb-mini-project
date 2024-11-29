@@ -21,7 +21,9 @@ function CreatePost({ isOpen, onClose,newPost  }) {
   // Use refs for focus management
   const initialRef = useRef(null);
   const finalRef = useRef(null);
-  const {user,token}=useContext(AuthContext)
+  // const {user,token}=useContext(AuthContext)
+  const token =localStorage.getItem('token')
+  const user=localStorage.getItem('userId')
 
   function handleInputChange(e) {
     const {value}=e.target

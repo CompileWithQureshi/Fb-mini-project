@@ -25,7 +25,7 @@ function Login() {
   const navigate=useNavigate()
   const handelChange=(e)=>{
     const {name,value}=e.target
-    console.log(name);
+    // console.log(name);
 
     setUserData((prevdata)=>({...prevdata,[name]:value}))
     setIsError((prevError)=>({...prevError,[name]:false}))
@@ -54,7 +54,7 @@ function Login() {
       const {message,token,user}=response.data
       console.log('message:',message);
       const id=user._id
-      console.log('id',id);
+      // console.log('id',id);
       
       logins(token,id)
       if (response.status ===200) {

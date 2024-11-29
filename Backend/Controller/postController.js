@@ -77,11 +77,7 @@ const UpdatePost = async (req, res) => {
       message: "Input is empty",
     });
   }
-  if (req.user.userId !== id) {
-    return res
-      .status(403)
-      .json({ message: "Unauthorized to update this user" });
-  }
+  
   try {
     let posts = await Post.findOne({ _id: postId });
     if (!posts) {
