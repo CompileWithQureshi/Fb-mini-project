@@ -4,10 +4,10 @@
     "main": "Backend/index.js",
     "type": "module",
     "scripts": {
-        "start": "cross-env NODE_ENV=production node Backend/index.js",
-        "dev": "nodemon Backend/index.js",
-        "build": "cd Frontend && npm install && npm run build"
-    },
+  "start": "node Backend/index.js",
+  "dev": "nodemon Backend/index.js",
+  "build": "cd Frontend && npm install && npm run build"
+},
     "keywords": [],
     "author": "",
     "license": "ISC",
@@ -18,8 +18,7 @@
         "dotenv": "^16.4.5",
         "express": "^4.21.1",
         "jsonwebtoken": "^9.0.2",
-        "mongoose": "^8.8.0",
-        "cross-env": "^7.0.3"
+        "mongoose": "^8.8.0"
 
     },
     "devDependencies": {
