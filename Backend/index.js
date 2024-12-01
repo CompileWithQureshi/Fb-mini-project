@@ -15,7 +15,7 @@ const MONGO_URL = process.env.MONGO_URL;
 
 // CORS Configuration
 const corsOptions = {
-  origin: process.env.NODE_ENV === "production" ? "your-production-url.com" : "http://localhost:5173",
+  origin: process.env.NODE_ENV === "production" ? "https://your-production-url.com" : "http://localhost:5173",
 };
 app.use(cors(corsOptions));
 
@@ -27,10 +27,12 @@ app.use("/api", [UserRoute, PostRoute]);
 
 // Serve Frontend in Production
 const __dirname = path.resolve(); // Fix _dirname
+const distPath = path.join(__dirname, "Frontend", "dist");
+
 if (process.env.NODE_ENV === "production") {
-  app.use(express.static(path.join(__dirname, "/Frontend/dist")));
+  app.use(express.static(distPath));
   app.get("*", (req, res) => {
-    res.sendFile(path.resolve(__dirname, "Frontend", "dist", "index.html"));
+    res.sendFile(path.resolve(distPath, "index.html"));
   });
 }
 
@@ -46,4 +48,5 @@ mongoose
   })
   .catch((error) => {
     console.error("Error connecting to MongoDB:", error.message);
+    process.exit(1); // Exit if there's an error with MongoDB connection
   });
