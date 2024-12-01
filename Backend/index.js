@@ -15,7 +15,7 @@ const MONGO_URL = process.env.MONGO_URL;
 
 // CORS Configuration
 const corsOptions = {
-  origin: process.env.NODE_ENV === "production" ? "https://your-production-url.com" : "http://localhost:5173",
+  origin: process.env.NODE_ENV === "production" && "http://localhost:5173",
 };
 app.use(cors(corsOptions));
 
