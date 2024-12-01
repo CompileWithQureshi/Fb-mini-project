@@ -8,29 +8,28 @@ import {
   Input,
   Button,
 } from '@chakra-ui/react';
-import {useNavigate} from 'react-router-dom'
+import { useNavigate } from 'react-router-dom';
 
 function SignUp() {
-  const navigate=useNavigate()
+  const navigate = useNavigate();
   const [user, setUser] = useState({
     userName: '',
     email: '',
-    
-    password: ''
+    password: '',
   });
-  
+
   const [isError, setIsError] = useState({
     isUser: false,
     isEmail: false,
     isPassword: false,
   });
 
-  const toast = useToast();  // Correct useToast hook usage
+  const toast = useToast();
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setUser((prevUser) => ({ ...prevUser, [name]: value }));
-    setIsError((prevErrors) => ({ ...prevErrors, [name]: false })); // Reset error for this field
+    setIsError((prevErrors) => ({ ...prevErrors, [name]: false }));
   };
 
   const validateEmail = (email) => {
@@ -44,7 +43,7 @@ function SignUp() {
     const newErrors = {
       isUser: user.userName === '',
       isEmail: user.email === '' || !validateEmail(user.email),
-      isPassword: user.password === ''
+      isPassword: user.password === '',
     };
 
     setIsError(newErrors);
@@ -55,7 +54,6 @@ function SignUp() {
 
     try {
       const response = await axios.post('/api/user', user);
-      // console.log("Response from server:", response);
 
       if (response.status === 200) {
         toast({
@@ -66,33 +64,29 @@ function SignUp() {
           isClosable: true,
         });
 
-        // Reset form and errors after a delay to show the toast
         setTimeout(() => {
           setUser({
             userName: '',
             email: '',
-            phone: '',
-            password: ''
+            password: '',
           });
-          navigate('/login')
+          navigate('/login');
           setIsError({
             isUser: false,
             isEmail: false,
-            isPassword: false
+            isPassword: false,
           });
-        }, 2000);  // Optional: if you want to wait for the toast to close
+        }, 2000);
       } else {
         toast({
           title: response.statusText,
-          description: "Something went wrong.",
+          description: 'Something went wrong.',
           status: 'error',
           duration: 9000,
           isClosable: true,
         });
       }
-
     } catch (error) {
-      // console.error("Error submitting data:", error.response?.data || error.message);
       toast({
         title: 'Error.',
         description: 'There was an error processing your request.',
@@ -104,11 +98,16 @@ function SignUp() {
   };
 
   return (
-    <div className="flex justify-center items-center h-screen x">
-      <form onSubmit={handleSubmit} className="w-[400px]">
-        <h1 className='text-center font-mono font-semibold text-3xl'>Sign Up</h1>
+    <div className="flex justify-center items-center h-screen bg-gray-50 p-4">
+      <form
+        onSubmit={handleSubmit}
+        className="w-full max-w-md bg-slate-100 p-8 rounded-lg shadow-lg sm:p-16"
+      >
+        <h1 className="text-center font-mono font-semibold text-2xl sm:text-3xl mb-6">
+          Sign Up
+        </h1>
         <FormControl isInvalid={isError.isUser} mb={4}>
-          <FormLabel>User Name</FormLabel>
+          <FormLabel>Name</FormLabel>
           <Input
             type="text"
             placeholder="Enter Username"
@@ -116,7 +115,9 @@ function SignUp() {
             value={user.userName}
             onChange={handleInputChange}
           />
-          {isError.isUser && <FormErrorMessage>User Name is required.</FormErrorMessage>}
+          {isError.isUser && (
+            <FormErrorMessage>User Name is required.</FormErrorMessage>
+          )}
         </FormControl>
 
         <FormControl isInvalid={isError.isEmail} mb={4}>
@@ -128,7 +129,11 @@ function SignUp() {
             value={user.email}
             onChange={handleInputChange}
           />
-          {isError.isEmail && <FormErrorMessage>Invalid or empty email address.</FormErrorMessage>}
+          {isError.isEmail && (
+            <FormErrorMessage>
+              Invalid or empty email address.
+            </FormErrorMessage>
+          )}
         </FormControl>
 
         <FormControl isInvalid={isError.isPassword} mb={4}>
@@ -140,10 +145,17 @@ function SignUp() {
             value={user.password}
             onChange={handleInputChange}
           />
-          {isError.isPassword && <FormErrorMessage>Password is required.</FormErrorMessage>}
+          {isError.isPassword && (
+            <FormErrorMessage>Password is required.</FormErrorMessage>
+          )}
         </FormControl>
 
-        <Button type="submit" colorScheme="teal" width="full">
+        <Button
+          type="submit"
+          colorScheme="green"
+          width="full"
+          className="mt-4"
+        >
           Submit
         </Button>
       </form>

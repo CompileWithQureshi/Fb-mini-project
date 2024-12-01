@@ -4,8 +4,9 @@
     "main": "Backend/index.js",
     "type": "module",
     "scripts": {
-        "start": "node Backend/index.js",
-        "dev": "nodemon Backend/index.js"
+        "start": "cross-env NODE_ENV=production node Backend/index.js",
+        "dev": "nodemon Backend/index.js",
+        "build": "cd Frontend && npm install && npm run build"
     },
     "keywords": [],
     "author": "",
@@ -20,6 +21,7 @@
         "mongoose": "^8.8.0"
     },
     "devDependencies": {
+        "cross-env": "^7.0.3",
         "nodemon": "^3.1.7"
     }
 }
