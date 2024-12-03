@@ -91,10 +91,19 @@ function Posts() {
   if (error) return <Box className="flex justify-center mt-8"><Text color="red.500">{error}</Text></Box>;
 
   return (
-    <Container maxW="container.lg" py={6}>
-      <Box mb={6} className="flex justify-between items-center sm:flex-col sm:items-center">
+    <Container maxW="container.lg" py={1}>
+      <Box
+        // position="fixed"
+        // top={0} // Fix to the top
+        // left="60%" // Center horizontally
+        // zIndex={10} // Ensure it's above other content
+        width="100%"
+        height={'50px'}
+        // p={4} 
+        
+      >
         {/* Buttons */}
-        <div className="flex flex-col gap-4 sm:flex-row sm:gap-6 fixed z-10 left-1/3 ">
+        <div className="flex flex-col gap-4 sm:flex-row sm:gap-6 fixed z-10 bottom-9 left-[60%]  p-5">
           <Button
             onClick={() => { setOverlay(<OverlayOne />); onOpen(); }}
             colorScheme="green"
@@ -103,6 +112,8 @@ function Posts() {
             borderRadius="lg"
             boxShadow="lg"
             _hover={{ bg: "green.600" }}
+        shadow={'2xl'}
+
           >
             Create New Post
           </Button>
@@ -116,6 +127,8 @@ function Posts() {
             borderRadius="full"
             width={{ base: "full", sm: "auto" }}
             _hover={{ bg: "red.600" }}
+        shadow={'2xl'}
+
           />
         </div>
       </Box>
