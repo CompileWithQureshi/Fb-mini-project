@@ -394,149 +394,175 @@ const isOwner = userId._id === user
       
       ) : (
         <Card
-  margin={5}
-  w={{ base: "100%", sm: "80%", lg: "60%" }}
-  textAlign="start"
-  boxShadow="2xl"
-  p="6"
-  rounded="md"
-  bg="white"
->
-  <CardHeader>
-    <Flex spacing="4">
-      <Flex flex="1" gap="4" justifyContent="flex-start" flexWrap="wrap">
-        <Avatar name="Segun Adebayo" src="https://bit.ly/sage-adebayo" />
-
-        <Box>
-          <Heading size="sm">{userId?.userName || "Guest"}</Heading>
-          <Text fontStyle="italic" fontSize="small" fontWeight="semibold">
-            Creator
-          </Text>
-        </Box>
-      </Flex>
-    </Flex>
-  </CardHeader>
-  <CardBody>
-    <Text>{content}</Text>
-  </CardBody>
-
-  <CardFooter
-    justify="space-between"
-    alignItems="center"
-    width="100%"
-    flexWrap="wrap" // Allow wrapping for small screens
-  >
-    <Flex
-      alignItems="center"
-      gap="10px"
-      flexDirection={{ base: "row", md: "row" }} // Ensure side-by-side layout
-      width={{ base: "100%", md: "auto" }} // Full width on small screens
-      justify={{ base: "space-around", md: "flex-start" }}
-    >
-      <Flex alignItems="center">
-        <Text fontSize={20} fontWeight={600} mr={2}>
-          {likesCount}
-        </Text>
-        <IconButton
-          variant="unstyled"
-          icon={<BiLike color={islike ? "red" : "gray"} size="30px" />}
-          onClick={handleLike}
-          aria-label="Like Post"
-        />
-      </Flex>
-
-      <Flex alignItems="center">
-        <IconButton
-          variant="unstyled"
-          icon={
-            <BiChat
-              color={commentData?.length > 0 ? "green" : "gray"}
-              size="30px"
-            />
-          }
-          aria-label="Comment"
-          onClick={toggleCommnet}
-        />
-        {commentData?.length > 0 && <Text>{commentData.length}</Text>}
-      </Flex>
-    </Flex>
-  </CardFooter>
-
-  {showComment && (
-    <VStack>
-      <Box
-        width="100%"
-        boxShadow="inner"
-        backgroundColor="gray.100"
-        padding="15px"
-        rounded="xl"
-        margin="5px"
-      >
-        <Flex
-          flexDirection="column"
-          gap="10px"
-          justifyContent="start"
-          margin="5px"
+          // minW={{base:''}}
+          margin={5}
+          w={{base:'100%',sm:'80%',lg:'60%'}}
+          textAlign="start"
+          boxShadow="2xl"
+          p="6"
+          rounded="md"
+          bg="white"
         >
-          {commentData.map((comm) => {
-            const { comment } = comm;
-
-            return (
-              <Text
-                padding="5px 10px"
-                maxWidth="250px"
-                align="start"
-                rounded="md"
-                color="gray.500"
-                backgroundColor="white"
-                alignItems="center"
-                shadow="lg"
-                fontWeight="medium"
-                fontFamily="cursive"
+          <CardHeader>
+            <Flex spacing="4">
+              <Flex
+                flex="1"
+                gap="4"
+                justifyContent="flex-start"
+                flexWrap="wrap"
               >
-                {comment}
-              </Text>
-            );
-          })}
-          {newComment && (
-            <Text
-              padding="5px 10px"
-              maxWidth="250px"
-              height="auto"
-              align="start"
-              rounded="md"
-              color="gray.500"
-              backgroundColor="white"
-              alignItems="center"
-              shadow="lg"
-              fontWeight="medium"
-              fontFamily="cursive"
-            >
-              {newComment}
-            </Text>
-          )}
-        </Flex>
-        <Flex align="center" justifyContent="space-between" gap="5px">
-          <Input
-            placeholder="comment"
-            boxShadow="inner"
-            backgroundColor="gray.300"
-            padding="15px"
-            rounded="md"
-            width="100%"
-            maxWidth="400px"
-            value={newComment}
-            onChange={(e) => setNewComment(e.target.value)}
-          />
-          <Button colorScheme="green" shadow="dark-lg" onClick={addComment}>
-            Add
-          </Button>
-        </Flex>
-      </Box>
-    </VStack>
-  )}
-</Card>
+                <Avatar
+                  name="Segun Adebayo"
+                  src="https://bit.ly/sage-adebayo"
+                />
 
+                <Box>
+                  <Heading size="sm">{userId?.userName || "Guest"}</Heading>
+                  <Text
+                    fontStyle="italic"
+                    fontSize="small"
+                    fontWeight="semibold"
+                  >
+                    Creator
+                  </Text>
+                </Box>
+              </Flex>
+              {/* <IconButton
+        variant='ghost'
+        colorScheme='gray'
+        aria-label='See menu'
+        icon={<BsThreeDotsVertical />}
+      /> */}
+            </Flex>
+          </CardHeader>
+          <CardBody>
+            <Text>{content}</Text>
+          </CardBody>
+          {/* <Image
+    objectFit='cover'
+    src='https://images.unsplash.com/photo-1531403009284-440f080d1e12?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1770&q=80'
+    alt='Chakra UI'
+  /> */}
+
+          <CardFooter
+            justify="center"
+            alignItems="center"
+            
+            gap="10px" // Smaller gap for mobile responsiveness
+            width="100%"
+          >
+            <Flex alignItems="center">
+              <Text fontSize={20} fontWeight={600} mr={2}>
+                {likesCount}
+              </Text>
+              <IconButton
+                variant="unstyled" // Ghost style for the button itself
+                icon={<BiLike color={islike ? "red" : "gray"} size="30px" />} // Change icon color dynamically
+                onClick={handleLike} // Handle like toggle
+                aria-label="Like Post"
+              />
+            </Flex>
+
+            <HStack spacing={2} alignItems="center">
+              <IconButton
+                variant="unstyled"
+                icon={
+                  <BiChat
+                    color={commentData?.length > 0 ? "green" : "gray"}
+                    size="30px"
+                  />
+                }
+                aria-label="Comment"
+                onClick={toggleCommnet}
+              />
+              {commentData?.length > 0 && <Text>{commentData.length}</Text>}
+            </HStack>
+
+            {/* <Button flex='1' variant='ghost' leftIcon={<BiShare />}>
+      Share
+    </Button> */}
+          </CardFooter>
+          {showComment && (
+            <VStack>
+              <Box
+                width="100%"
+                boxShadow="inner"
+                backgroundColor="gray.100"
+                padding="15px"
+                rounded="xl"
+                margin="5px"
+              >
+                <Flex
+                  flexDirection="column"
+                  gap="10px"
+                  justifyContent="start"
+                  margin="5px"
+                >
+                  {commentData.map((comm) => {
+                    const { comment } = comm;
+
+                    return (
+                      <>
+                        <Text
+                          padding="5px 10px "
+                          maxWidth="250px"
+                          align="start"
+                          rounded="md"
+                          color="gray.500"
+                          backgroundColor="white"
+                          alignItems="center"
+                          shadow="lg"
+                          fontWeight="medium"
+                          fontFamily="cursive"
+                        >
+                          {comment}
+                        </Text>
+                      </>
+                    );
+                  })}
+                  {newComment ? (
+                    <Text
+                      padding="5px 10px "
+                      maxWidth="250px"
+                      height='auto'
+                      align="start"
+                      rounded="md"
+                      color="gray.500"
+                      backgroundColor="white"
+                      alignItems="center"
+                      shadow="lg"
+                      fontWeight="medium"
+                      fontFamily="cursive"
+                    >
+                      {newComment || null}
+                    </Text>
+                  ) : (
+                    ""
+                  )}
+                </Flex>
+                <Flex align="center" justifyContent="space-between" gap="5px">
+                  <Input
+                    placeholder="comment"
+                    boxShadow="inner"
+                    backgroundColor="gray.300"
+                    padding="15px"
+                    rounded="md"
+                    width="400px"
+                    value={newComment}
+                    onChange={(e) => setNewComment(e.target.value)}
+                  />
+                  <Button
+                    colorScheme="green"
+                    shadow="dark-lg"
+                    onClick={addComment}
+                  >
+                    Add
+                  </Button>
+                </Flex>
+              </Box>
+            </VStack>
+          )}
+        </Card>
       )}
     </>
   );
