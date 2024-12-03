@@ -16,7 +16,7 @@ const __dirname = path.resolve();
 
 // CORS Configuration
 const corsOptions = {
-  origin: process.env.NODE_ENV === "production" ? "your-production-url.com" : "http://localhost:5173",
+  origin: process.env.NODE_ENV === "production" ? "https://fb-mini-project.onrender.com/" : "http://localhost:5173",
   credentials: true,
 };
 app.use(cors(corsOptions));

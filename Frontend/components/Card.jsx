@@ -447,8 +447,9 @@ const isOwner = userId._id === user
           <CardFooter
             justify="center"
             alignItems="center"
-            flexWrap="wrap"
-            gap="100px"
+            
+            gap="10px" // Smaller gap for mobile responsiveness
+            width="100%"
           >
             <Flex alignItems="center">
               <Text fontSize={20} fontWeight={600} mr={2}>
