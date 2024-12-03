@@ -28,16 +28,12 @@ app.use(express.json());
 app.use("/api", [UserRoute, PostRoute]);
 
 // Serve Frontend in Production
-const distPath = path.join(__dirname, "/Frontend/dist");
 if (process.env.NODE_ENV === "production") {
-  if (fs.existsSync(distPath)) {
-    app.use(express.static(distPath));
+    app.use(express.static(path.join(__dirname,"/Frontend/dist")));
     app.get("*", (_, res) => {
-      res.sendFile(path.resolve(distPath, "index.html"));
+      res.sendFile(path.resolve(__dirname,"Frontend","dist", "index.html"));
     });
-  } else {
-    console.error("Frontend `dist` folder not found. Did you run the build?");
-  }
+ 
 }
 
 // Connect to MongoDB and Start the Server
