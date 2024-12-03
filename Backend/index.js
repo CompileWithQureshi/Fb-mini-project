@@ -12,6 +12,8 @@ dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 5000;
 const MONGO_URL = process.env.MONGO_URL;
+const __dirname = path.resolve(); // Fix _dirname
+
 
 // CORS Configuration
 const corsOptions = {
@@ -26,13 +28,12 @@ app.use(express.json());
 app.use("/api", [UserRoute, PostRoute]);
 
 // Serve Frontend in Production
-const __dirname = path.resolve(); // Fix _dirname
-const distPath = path.join(__dirname, "Frontend", "dist");
+const distPath = path.join(__dirname, "/Frontend/dist");
 
 if (process.env.NODE_ENV === "production") {
   app.use(express.static(distPath));
-  app.get("*", (req, res) => {
-    res.sendFile(path.resolve(distPath, "index.html"));
+  app.get("*", (_, res) => {
+    res.sendFile(path.resolve(__dirname,"Frontend","dist", "index.html"));
   });
 }
 
