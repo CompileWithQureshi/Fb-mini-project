@@ -50,31 +50,14 @@ This repository contains a **social media mini-project** with a **MERN (MongoDB,
    MONGO_URL=<Your MongoDB Connection String>
    JWT_TOKEN=<Your JWT Secret>
    NODE_ENV=<development or production>
-.
-├── Backend/
-│   ├── controllers/
-│   │   ├── userController.js
-│   │   ├── postController.js
-│   ├── models/
-│   │   ├── user.js
-│   │   ├── post.js
-│   ├── Router/
-│   │   ├── userRoute.js
-│   │   ├── postRoute.js
-│   ├── server.js
-├── Frontend/
-│   ├── src/
-│   │   ├── components/
-│   │   │   ├── Navbar.js
-│   │   │   ├── Card.js
-│   │   ├── pages/
-│   │   │   ├── Posts.js
-│   ├── App.js
-│   ├── index.js
-├── .env
-├── package.json
-└── README.md
 
 git clone https://github.com/your-username/repo-name.git
 cd repo-name
+
+# Install backend dependencies
+npm install
+
+# Install frontend dependencies
+cd Frontend
+npm install
 
