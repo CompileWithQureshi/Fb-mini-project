@@ -52,7 +52,7 @@ const GetAllPost = async (req, res) => {
 
     if (id) query.userId= id;
     // if (user) query.userId = user;
-    console.log(query);
+    // console.log(query);
     
 
     const posts = await Post.find(query).populate('userId', 'userName');
@@ -198,7 +198,7 @@ const AddComment = async (req, res) => {
     post.comments.push({ userId, comment });
 
     const updatedPost = await post.save();
-    console.log("updatedPost",updatedPost.comments);
+    // console.log("updatedPost",updatedPost.comments);
     
 
     res.status(200).json({

@@ -181,14 +181,14 @@ const isOwner = userId._id === user
     <>
       {isOwner ? (
         <Card
-        minW={{ base: "90%", sm: "md" }} // Adjust min width for smaller screens
-        margin={5}
-        w={{ base: "100%", sm: "100%", lg: "60%" }} // Responsive width
+        minH="400px" // Set consistent height
+        w="100%"
+        my={5} // Avoid stacking overlap
         textAlign="start"
-        boxShadow="2xl"
-        p="6"
+        boxShadow="lg"
         rounded="md"
         bg="white"
+        p={'5px'}
       >
         <CardHeader>
           <Flex
@@ -257,7 +257,7 @@ const isOwner = userId._id === user
               </FormControl>
             </form>
           ) : (
-            <Text ref={inputRef}>{contents}</Text>
+            <Text ref={inputRef} borderY={'1px'} p={1}>{contents}</Text>
           )}
         </CardBody>
         <CardFooter
@@ -394,15 +394,15 @@ const isOwner = userId._id === user
       
       ) : (
         <Card
-          // minW={{base:''}}
-          margin={5}
-          w={{base:'100%',sm:'80%',lg:'60%'}}
-          textAlign="start"
-          boxShadow="2xl"
-          p="6"
-          rounded="md"
-          bg="white"
-        >
+        minH="400px" // Set consistent height
+        w="100%"
+        my={5} // Avoid stacking overlap
+        textAlign="start"
+        boxShadow="lg"
+        rounded="md"
+        bg="white"
+        p={'5px'}
+      >
           <CardHeader>
             <Flex spacing="4">
               <Flex
@@ -436,7 +436,7 @@ const isOwner = userId._id === user
             </Flex>
           </CardHeader>
           <CardBody>
-            <Text>{content}</Text>
+            <Text borderY={'1px'} p={1}>{content}</Text>
           </CardBody>
           {/* <Image
     objectFit='cover'
