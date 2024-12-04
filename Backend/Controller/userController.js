@@ -91,7 +91,7 @@ const UpdateUser = async (req, res) => {
     });
   }
 
-  console.log(req.user);
+  // console.log(req.user);
 
   if (req.user.userId  !== id) {
     return res

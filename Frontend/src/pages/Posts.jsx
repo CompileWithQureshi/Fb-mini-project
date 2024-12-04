@@ -1,31 +1,13 @@
-import { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
+import { Box, Text, Spinner, Container, SimpleGrid, useToast } from "@chakra-ui/react";
+import Navbar from "../../components/Navbar";
 import Cards from "../../components/Card";
-import {
-  Button,
-  useDisclosure,
-  ModalOverlay,
-  IconButton,
-  Box,
-  VStack,
-  Text,
-  Spinner,
-  useToast,
-  Container,
-} from "@chakra-ui/react";
-import { MdLogout } from "react-icons/md";
-import CreatePost from "../../components/CreatePost";
-import { AuthContext } from "../../hooks/AuthContext";
 
 function Posts() {
   const [postData, setPostData] = useState([]);
-  const { isOpen, onOpen, onClose } = useDisclosure();
-  const [overlay, setOverlay] = useState(null);
-  const { logout } = useContext(AuthContext);
-  
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-
   const toast = useToast();
 
   useEffect(() => {
@@ -33,9 +15,7 @@ function Posts() {
       try {
         const token = localStorage.getItem("token");
         const result = await axios.get("/api/post", {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
+          headers: { Authorization: `Bearer ${token}` },
         });
 
         setPostData(result.data.data);
@@ -56,14 +36,6 @@ function Posts() {
 
     fetchData();
   }, [toast]);
-
-  const OverlayOne = () => (
-    <ModalOverlay bg="blackAlpha.300" backdropFilter="blur(10px) hue-rotate(90deg)" />
-  );
-
-  function onLogout() {
-    logout();
-  }
 
   const newPostData = (newPost) => {
     setPostData((prevPost) => [newPost, ...prevPost]);
@@ -91,54 +63,12 @@ function Posts() {
   if (error) return <Box className="flex justify-center mt-8"><Text color="red.500">{error}</Text></Box>;
 
   return (
-    <Container maxW="container.lg" py={1}>
-      <Box
-        // position="fixed"
-        // top={0} // Fix to the top
-        // left="60%" // Center horizontally
-        // zIndex={10} // Ensure it's above other content
-        width="100%"
-        height={'50px'}
-        // p={4} 
-        
-      >
-        {/* Buttons */}
-        <div className="flex flex-col gap-4 sm:flex-row sm:gap-6 fixed z-10 bottom-9 left-[60%]  p-5">
-          <Button
-            onClick={() => { setOverlay(<OverlayOne />); onOpen(); }}
-            colorScheme="green"
-            size="lg"
-            width={{ base: "full", sm: "auto" }}
-            borderRadius="lg"
-            boxShadow="lg"
-            _hover={{ bg: "green.600" }}
-        shadow={'2xl'}
+    <main className="w-full ">
+      <Navbar addNewPost={newPostData} /> 
 
-          >
-            Create New Post
-          </Button>
-          <IconButton
-            icon={<MdLogout />}
-            aria-label="Logout"
-            variant="solid"
-            colorScheme="red"
-            onClick={onLogout}
-            size="lg"
-            borderRadius="full"
-            width={{ base: "full", sm: "auto" }}
-            _hover={{ bg: "red.600" }}
-        shadow={'2xl'}
 
-          />
-        </div>
-      </Box>
 
-      {/* Posts Section */}
-      <VStack
-        spacing={6}
-        align="stretch"
-        className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"
-      >
+      <SimpleGrid columns={{ base: 1, sm: 2, lg: 3 }} spacing={6} width="100%" marginY={"20"} >
         {postData.length === 0 ? (
           <Text textAlign="center" color="gray.500" fontSize="xl">
             No posts found.
@@ -148,22 +78,15 @@ function Posts() {
             const { userId, content, likesId, comments, _id } = post;
             return (
               <Cards
-                key={post._id}
+                key={_id}
                 data={{ userId, content, likesId, comments, _id }}
                 deletePost={deletePost}
               />
             );
           })
         )}
-      </VStack>
-
-      <CreatePost
-        isOpen={isOpen}
-        onClose={onClose}
-        overlay={overlay}
-        newPost={newPostData}
-      />
-    </Container>
+      </SimpleGrid>
+    </main>
   );
 }
 
